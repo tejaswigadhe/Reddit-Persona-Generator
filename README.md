@@ -74,7 +74,7 @@ https://www.reddit.com/user/kojied/
 ```
 
 
-## 🌐 Optional Flask Web UI
+##  Optional Flask Web UI
 
 To run the web interface:
 
@@ -102,8 +102,6 @@ reddit-user-persona/
 │   ├── error.html
 │   ├── persona.html
 │   └── populate.js
-├── output/
-│   └── persona.json
 └── README.md
 ```
 
