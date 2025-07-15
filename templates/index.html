@@ -1,0 +1,18 @@
+<form method="POST">
+  <label for="userInput" style="font-weight:bold;">Enter Reddit URL:</label><br><br>
+  <input 
+    type="text" 
+    id="userInput" 
+    name="reddit_url" 
+    placeholder="https://www.reddit.com/user/..." 
+    required 
+    style="width:80%; padding:0.5rem; border-radius:8px; border:1px solid #ccc;" 
+  />
+  <br><br>
+  <button 
+    type="submit" 
+    style="background-color:#ff4500; color:white; padding:0.5rem 1.5rem; border:none; border-radius:8px; cursor:pointer;">
+    Generate Persona
+  </button>
+  <div id="status" style="margin-top:1rem; color:#555;"></div>
+</form>

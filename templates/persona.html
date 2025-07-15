@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reddit User Persona</title>
+    <style>
+    body {font-family: Arial,sans-serif;padding:2rem;color:#333;}
+    h2 {color:#f47c20;text-transform:uppercase;border-bottom:2px solid #ccc;}
+    .section {margin-bottom:2rem;}
+    .label-bar, .split-bar {display:flex;align-items:center;margin:0.5rem 0;}
+    .label {width:140px;font-weight:bold;}
+    .bar-container, .bar-personality {flex:1;height:12px;background:#eee;border-radius:4px;overflow:hidden;display:flex;}
+    .bar-fill {background:#333;height:100%;transition:width .5s;}
+    .bar-left {background:#666;height:100%;transition:width .5s;}
+    .bar-right {background:#ccc;height:100%;transition:width .5s;}
+    .split-bar {justify-content:space-between;font-weight:bold;font-size:0.85rem;}
+    #status {margin-top:1rem;color:#555;}
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <img src="{{ avatar_url or url_for('static', filename='default-avatar.png') }}"
+        alt="{{ username }} avatar"
+        class="avatar-img">
+      <h1>{{ username }}</h1>
+      <p><strong>Age:</strong> {{ age }}</p>
+      <p><strong>Occupation:</strong> {{ occupation }}</p>
+      <p><strong>Status:</strong> {{ relationship_status }}</p>
+      <p><strong>Location:</strong> {{ location }}</p>
+      <p><strong>Tier:</strong> {{ adoption_tier }}</p>
+      <p><strong>Archetype:</strong> {{ user_archetype }}</p>
+      <div class="quote">
+        <p><em>"{{ quote }}"</em></p>
+      </div>
+    </div>
+  <div class="section">
+    <h2>Interests</h2>
+    {% for interest in interests %}
+      <span class="tag">{{ interest }}</span>
+    {% endfor %}
+  </div>
+
+    <!-- MOTIVATIONS + PERSONALITY -->
+  <div class="section">
+    <h2>Motivations</h2>
+    <div class="label-bar"><div class="label">Convenience</div><div class="bar-container"><div id="m-Convenience" class="bar-fill" style="width:0%"></div></div></div>
+    <div class="label-bar"><div class="label">Wellness</div><div class="bar-container"><div id="m-Wellness" class="bar-fill" style="width:0%"></div></div></div>
+    <div class="label-bar"><div class="label">Speed</div><div class="bar-container"><div id="m-Speed" class="bar-fill" style="width:0%"></div></div></div>
+    <div class="label-bar"><div class="label">Preferences</div><div class="bar-container"><div id="m-Preferences" class="bar-fill" style="width:0%"></div></div></div>
+    <div class="label-bar"><div class="label">Comfort</div><div class="bar-container"><div id="m-Comfort" class="bar-fill" style="width:0%"></div></div></div>
+    <div class="label-bar"><div class="label">Dietary Needs</div><div class="bar-container"><div id="m-Dietary Needs" class="bar-fill" style="width:0%"></div></div></div>
+  </div>
+  <div class="section">
+    <h2>Personality</h2>
+    <div class="split-bar"><span>Introvert</span><span>Extrovert</span></div>
+    <div class="bar-personality"><div id="p-Introvert" class="bar-left" style="width:50%"></div><div id="p-Extrovert" class="bar-right" style="width:50%"></div></div>
+
+    <div class="split-bar"><span>Intuition</span><span>Sensing</span></div>
+    <div class="bar-personality"><div id="p-Intuition" class="bar-left" style="width:50%"></div><div id="p-Sensing" class="bar-right" style="width:50%"></div></div>
+
+    <div class="split-bar"><span>Feeling</span><span>Thinking</span></div>
+    <div class="bar-personality"><div id="p-Feeling" class="bar-left" style="width:50%"></div><div id="p-Thinking" class="bar-right" style="width:50%"></div></div>
+
+    <div class="split-bar"><span>Perceiving</span><span>Judging</span></div>
+    <div class="bar-personality"><div id="p-Perceiving" class="bar-left" style="width:50%"></div><div id="p-Judging" class="bar-right" style="width:50%"></div></div>
+  </div>
+
+
+    <!-- BEHAVIOUR, FRUSTRATIONS, GOALS -->
+    <div>
+      <div class="section">
+        <h2>Behaviour & Habits</h2>
+        <ul>
+          {% for habit in habits_and_behaviors %}
+            <li>{{ habit }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Frustrations</h2>
+        <ul>
+          {% for frustration in frustrations %}
+            <li>{{ frustration }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="section">
+        <h2>Goals & Needs</h2>
+        <ul>
+          {% for goal in goals_and_needs %}
+            <li>{{ goal }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+<script>
+  const motivations = {{ motivations | tojson }};
+  motivations.forEach(m => {
+      const el = document.getElementById(`m-${m.name}`);
+      if (el) el.style.width = `${m.score}%`;
+    });
+  const personality = {{ personality | tojson }};
+  personality.forEach(p => {
+    const [leftLabel, rightLabel] = p.dimension.split(" vs ");
+    const leftScore = p.score;
+    const rightScore = 100 - p.score;
+
+    const leftId = `p-${leftLabel}`;
+    const rightId = `p-${rightLabel}`;
+
+    const leftBar = document.getElementById(leftId);
+    const rightBar = document.getElementById(rightId);
+
+    if (leftBar) leftBar.style.width = `${leftScore}%`;
+    if (rightBar) rightBar.style.width = `${rightScore}%`;
+  });
+</script>
